@@ -50,7 +50,8 @@ The mode automatically configures Eglot to work with the Templ LSP server. To st
 
 ## Related Packages
 
-The [templ-ts-mode](https://github.com/danderson/templ-ts-mode) package implements support for Templ as well, but using tree-sitter instead of the older regexp-based approach for font-locking.
+- [templ-ts-mode](https://github.com/danderson/templ-ts-mode): Uses tree-sitter instead of the older regexp-based approach for font-locking.
+- [poly-templ](https://github.com/rcy/poly-templ): Uses [polymode](https://github.com/polymode/polymode) to implement Templ syntax highlighting.
 
 ## License
 
