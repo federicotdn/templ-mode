@@ -54,6 +54,7 @@ This mode extends `go-mode' with additional syntax highlighting for
 Templ-specific constructs like templ keywords, @ directives, and
 HTML-like tags."
   :group 'templ-mode
+  ;; Set up font locking.
   (font-lock-add-keywords
    nil
    `(
@@ -69,7 +70,11 @@ HTML-like tags."
       (1 font-lock-function-name-face t)
       (2 font-lock-variable-name-face t))
      )
-   ))
+   )
+  ;; The `go-mode-indent-line' function does not work well with the
+  ;; embedded <tags>. Now TAB will just insert a tab character.
+  (set (make-local-variable 'tab-always-indent) nil)
+  (set (make-local-variable 'indent-line-function) (lambda () 'noindent)))
 
 (defun templ-fmt ()
   "Format the current buffer using templ fmt."
