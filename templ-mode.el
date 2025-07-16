@@ -60,7 +60,11 @@ HTML-like tags."
      (,(concat "\\(\\s-*templ\\s-+\\)\\(" go-identifier-regexp "\\)")
       (1 font-lock-keyword-face t)
       (2 font-lock-function-name-face t))
-     (,(concat "@" go-identifier-regexp "\\>") 0 font-lock-negation-char-face t)
+     (,(concat "@" go-identifier-regexp) 0 font-lock-negation-char-face t)
+     ("<\\([a-zA-Z][a-zA-Z0-9-]*\\)\\([^>]*\\)>\\([^<{}@]*\\)</\\1>"
+      (1 font-lock-function-name-face t)
+      (2 font-lock-variable-name-face t)
+      (3 font-lock-string-face t))
      ("</?\\([a-zA-Z][a-zA-Z0-9-]*\\)\\([^>]*?\\)/?>"
       (1 font-lock-function-name-face t)
       (2 font-lock-variable-name-face t))

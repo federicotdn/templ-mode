@@ -1,5 +1,6 @@
 // Copied almost entirely from:
 // https://github.com/a-h/templ/blob/main/examples/blog/posts_templ.go
+// Note: this does not produce a useful HTML, it's just for development.
 
 package examples
 
@@ -10,30 +11,40 @@ import (
 
 type Post struct {
 	Title string
-	Date time.Time
+	Date  time.Time
 }
 
-func testing() {
+func testing() string {
 	// hello world
+	return "hello"
 }
 
 templ headerComponent(title string) {
 	<head><title>{ title }</title></head>
 }
 
-templ contentComponent(title string, body templ.Component) {
+templ contentComponent(title string, body templ.Component, i *int) {
+	var i *int
 	<body>
+		<h1>Some text containing stuff</h1>
 		<h1>{ title }</h1>
+		<h1>{ testing() }</h1>
+		<h1>{ i == nil }</h1>
+		<h1 class="content">Hello world!</h1>
+		<div><h1 class="content">Hello world!</h1></div>
+		<h1 class="content">{ i == nil }</h1>
 		<div class="content">
 			@body
+			@headerComponent("My Blog")
 		</div>
+		@headerComponent("My Blog")
 	</body>
 }
 
 templ contentPage(title string, body templ.Component) {
 	<html>
 		@headerComponent(title)
-		@contentComponent(title, body)
+		@contentComponent(title, body, nil)
 	</html>
 }
 
