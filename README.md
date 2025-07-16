@@ -1,2 +1,3 @@
 # templ-mode
-Emacs major mode for editing Templ template files
+
+Emacs major mode for editing Templ template files.
