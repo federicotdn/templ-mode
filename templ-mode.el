@@ -26,7 +26,10 @@
 
 ;;; Commentary:
 
-;; TODO
+;; Major mode for editing Templ template files.
+;;
+;; This mode provides syntax highlighting for Templ template files,
+;; formatting via templ fmt, and LSP support through eglot.
 
 ;;; Code:
 
@@ -46,7 +49,10 @@ returned by `project-root'."
 
 ;;;###autoload
 (define-derived-mode templ-mode go-mode "Templ"
-  "TODO"
+  "Major mode for editing Templ template files.
+This mode extends `go-mode' with additional syntax highlighting for
+Templ-specific constructs like templ keywords, @ directives, and
+HTML-like tags."
   :group 'templ-mode
   (font-lock-add-keywords
    nil
@@ -86,7 +92,7 @@ returned by `project-root'."
         (user-error "Applying templ fmt failed")))))
 
 (defun templ-mode--server (_)
-  "TODO"
+  "Return the command to start the Templ LSP server."
   (let* ((is-tool (eq templ-mode-command 'tool))
          (proj (and is-tool (project-current)))
          (default-directory (if proj (expand-file-name
