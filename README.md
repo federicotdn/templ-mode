@@ -7,6 +7,9 @@ Templ is a language for writing HTML user interfaces in Go. This mode provides s
 > [!NOTE]
 > This mode depends on and extends [go-mode](https://github.com/dominikh/go-mode.el). It will not work with other Go-related modes.
 
+> [!NOTE]
+> This mode does **not** depend on tree-sitter.
+
 ## Installation
 
 Download `templ-mode.el` and place it in your Emacs load path.
@@ -38,6 +41,8 @@ By default, `templ-mode` looks for the `templ` binary in your PATH. You can cust
 ```
 
 When using `'tool`, the mode will run `go tool templ` from your project root as returned by `(project-root (project-current))`.
+
+Go tools were introduced in Go 1.24. Read more about them [here](https://tip.golang.org/doc/go1.24#tools).
 
 ### LSP Support
 
