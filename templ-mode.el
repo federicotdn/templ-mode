@@ -75,17 +75,24 @@ HTML-like tags."
   (set (make-local-variable 'indent-line-function) #'templ-mode--indent-line)
   ;; Disable electric indentation.
   (when (boundp 'electric-indent-chars)
-    (set (make-local-variable 'electric-indent-chars) nil)))
+    (set (make-local-variable 'electric-indent-chars) nil))
+  ;; Tweak electric pairs.
+  (when (boundp 'electric-pair-pairs)
+    (set (make-local-variable 'electric-pair-pairs)
+         (cons '(?< . ?>) electric-pair-pairs))))
 
 (defun templ-mode--indent-line ()
   "Indent the current line following a simpler heuristic."
-  (let ((indentation (current-indentation))
+  (let ((current-col (current-column))
+        (first-col (save-excursion (back-to-indentation) (current-column)))
+        (indentation (current-indentation))
         (prev-indentation (or (ignore-errors
                                 (save-excursion
                                   (previous-line)
                                   (current-indentation)))
                               -1)))
-    (if (< indentation prev-indentation)
+    (if (and (< indentation prev-indentation)
+             (<= current-col first-col))
         (indent-line-to prev-indentation)
       (insert "\t"))))
 
