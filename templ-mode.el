@@ -120,7 +120,7 @@ HTML-like tags."
             (message "Applied templ fmt"))
         (user-error "Applying templ fmt failed")))))
 
-(defun templ-mode--server (_)
+(defun templ-mode--server (&rest _)
   "Return the command to start the Templ LSP server."
   (let* ((is-tool (eq templ-mode-command 'tool))
          (proj (and is-tool (project-current)))
@@ -135,10 +135,31 @@ HTML-like tags."
 
 ;;;###autoload
 (with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs (cons 'templ-mode #'templ-mode--server)))
+  ;; Add Eglot server command for `templ-mode'.
+  (add-to-list 'eglot-server-programs '(templ-mode . templ-mode--server))
+
+  ;; Advice to handle `templ-mode' specially: without this,
+  ;; if a `go-mode' Eglot server is already running when the
+  ;; user runs 'M-x eglot' on a Templ buffer, the `go-mode'
+  ;; server will be used for it, because of how Eglot looks
+  ;; up servers for buffers.
+  ;;
+  ;; NOTE:
+  ;; This advice makes assumptions about how the internal
+  ;; `eglot--languageId' and `eglot--languages' functions
+  ;; work.
+  (advice-add 'eglot--languageId :around
+              (lambda (orig-fun &rest args)
+                ;; For templ-mode buffers specifically...
+                (if (eq major-mode 'templ-mode)
+                    (let* ((server (car args))
+                           (languages (and server (eglot--languages server))))
+                      ;; ...check against templ-mode servers exclusively.
+                      (cdr (assoc 'templ-mode languages)))
+                  (apply orig-fun args)))))
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist (cons "\\.templ\\'" 'templ-mode))
+(add-to-list 'auto-mode-alist '("\\.templ\\'" . templ-mode))
 
 (provide 'templ-mode)
 ;;; templ-mode.el ends here
