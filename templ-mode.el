@@ -71,10 +71,23 @@ HTML-like tags."
       (2 font-lock-variable-name-face t))
      )
    )
-  ;; The `go-mode-indent-line' function does not work well with the
-  ;; embedded <tags>. Now TAB will just insert a tab character.
-  (set (make-local-variable 'tab-always-indent) nil)
-  (set (make-local-variable 'indent-line-function) (lambda () 'noindent)))
+  ;; Replace go-mode's handling of indentation.
+  (set (make-local-variable 'indent-line-function) #'templ-mode--indent-line)
+  ;; Disable electric indentation.
+  (when (boundp 'electric-indent-chars)
+    (set (make-local-variable 'electric-indent-chars) nil)))
+
+(defun templ-mode--indent-line ()
+  "Indent the current line following a simpler heuristic."
+  (let ((indentation (current-indentation))
+        (prev-indentation (or (ignore-errors
+                                (save-excursion
+                                  (previous-line)
+                                  (current-indentation)))
+                              -1)))
+    (if (< indentation prev-indentation)
+        (indent-line-to prev-indentation)
+      (insert "\t"))))
 
 (defun templ-fmt ()
   "Format the current buffer using templ fmt."
