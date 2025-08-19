@@ -48,6 +48,9 @@ Go tools were introduced in Go 1.24. Read more about them [here](https://tip.gol
 
 The mode automatically configures Eglot to work with the Templ LSP server. To start the server, use <kbd>M-x</kbd> `eglot` <kbd>RET</kbd> in a `.templ` buffer.
 
+> [!WARNING]
+> After running `eglot`, the server may take an unusual amount of time to start up, e.g. 15 seconds or more.
+
 ## Related Packages
 
 - [templ-ts-mode](https://github.com/danderson/templ-ts-mode): Uses tree-sitter instead of the older regexp-based approach for font-locking.
